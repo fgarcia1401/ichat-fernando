@@ -11,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
+import br.com.fernando.ichat_alura.BuildConfig;
 import br.com.fernando.ichat_alura.activity.MainActivity;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
 
@@ -35,7 +36,7 @@ public class ChatService {
                 String texto = mensagem.getTexto();
 
                 try {
-                    URL url = new URL("http://192.168.2.48:8080/polling");
+                    URL url = new URL(BuildConfig.API_CHAT_URL);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -68,7 +69,7 @@ public class ChatService {
             public void run() {
 
                 try {
-                    URL url = new URL("http://192.168.2.48:8080/polling");
+                    URL url = new URL(BuildConfig.API_CHAT_URL);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -86,7 +87,7 @@ public class ChatService {
                     String json = builder.toString();
                     JSONObject jsonObject = new JSONObject(json);
 
-                    final Mensagem mensagem = new Mensagem(jsonObject.getInt("id"), jsonObject.getString("test"));
+                    final Mensagem mensagem = new Mensagem(jsonObject.getInt("id"), jsonObject.getString("text"));
 
                     activity.runOnUiThread(new Runnable() {
                         @Override

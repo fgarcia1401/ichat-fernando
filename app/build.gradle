@@ -11,7 +11,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/polling\""
+        }
         release {
+            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/polling\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
