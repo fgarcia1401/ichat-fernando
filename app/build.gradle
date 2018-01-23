@@ -12,10 +12,10 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/polling\""
+            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/\""
         }
         release {
-            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/polling\""
+            buildConfigField "String", "API_CHAT_URL", "\"http://172.21.199.136:8080/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -23,6 +23,15 @@ android {
 }
 
 dependencies {
+
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
+    compile 'com.squareup.okio:okio:1.6.0'
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
