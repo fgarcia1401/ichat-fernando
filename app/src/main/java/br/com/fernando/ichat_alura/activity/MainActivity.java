@@ -10,15 +10,14 @@ import android.widget.ListView;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import br.com.fernando.ichat_alura.BuildConfig;
 import br.com.fernando.ichat_alura.R;
 import br.com.fernando.ichat_alura.adapter.MensagemAdapter;
-import br.com.fernando.ichat_alura.callback.EnviarMensagemCallback;
-import br.com.fernando.ichat_alura.callback.OuvirMensagensCallback;
+import br.com.fernando.ichat_alura.callbacks.EnviarMensagemCallback;
+import br.com.fernando.ichat_alura.callbacks.OuvirMensagensCallback;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
 import br.com.fernando.ichat_alura.service.ChatService;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -41,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listaDeMensagens = findViewById(R.id.lv_mensagens);
-        etMensagem = findViewById(R.id.et_texto);
-        btnEnviar = findViewById(R.id.btn_enviar);
+        listaDeMensagens = (ListView) findViewById(R.id.lv_mensagens);
+        etMensagem = (EditText) findViewById(R.id.et_texto);
+        btnEnviar = (Button) findViewById(R.id.btn_enviar);
 
         mensagens = new ArrayList<>();
 

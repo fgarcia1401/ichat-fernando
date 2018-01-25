@@ -1,4 +1,4 @@
-package br.com.fernando.ichat_alura.callback;
+package br.com.fernando.ichat_alura.callbacks;
 
 import retrofit2.Call;
 import retrofit2.Response;
