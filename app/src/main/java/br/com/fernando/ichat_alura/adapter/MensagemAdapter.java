@@ -47,7 +47,7 @@ public class MensagemAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
 
         View linha = activity.getLayoutInflater().inflate(R.layout.mensagem, viewGroup, false);
-        TextView texto = linha.findViewById(R.id.tv_texto);
+        TextView texto = (TextView) linha.findViewById(R.id.tv_texto);
         Mensagem mensagem = getItem(i);
         texto.setText(mensagem.getTexto());
 

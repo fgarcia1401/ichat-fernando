@@ -2,6 +2,7 @@ package br.com.fernando.ichat_alura.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,15 +11,18 @@ import android.widget.ListView;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import br.com.fernando.ichat_alura.BuildConfig;
 import br.com.fernando.ichat_alura.R;
 import br.com.fernando.ichat_alura.adapter.MensagemAdapter;
-import br.com.fernando.ichat_alura.callback.EnviarMensagemCallback;
-import br.com.fernando.ichat_alura.callback.OuvirMensagensCallback;
+import br.com.fernando.ichat_alura.app.ChatApplication;
+import br.com.fernando.ichat_alura.callbacks.EnviarMensagemCallback;
+import br.com.fernando.ichat_alura.callbacks.OuvirMensagensCallback;
+import br.com.fernando.ichat_alura.component.ChatComponent;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
 import br.com.fernando.ichat_alura.service.ChatService;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -34,37 +38,28 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listaDeMensagens;
     private List<Mensagem> mensagens;
-    private ChatService chatService;
+
+    @Inject
+    ChatService chatService;
+
+    private ChatComponent component;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listaDeMensagens = findViewById(R.id.lv_mensagens);
-        etMensagem = findViewById(R.id.et_texto);
-        btnEnviar = findViewById(R.id.btn_enviar);
+        component = ((ChatApplication) getApplication()).getComponent();
+        component.inject(this);
+
+        listaDeMensagens = (ListView) findViewById(R.id.lv_mensagens);
+        etMensagem = (EditText) findViewById(R.id.et_texto);
+        btnEnviar = (Button) findViewById(R.id.btn_enviar);
 
         mensagens = new ArrayList<>();
 
         MensagemAdapter mensagemAdapter = new MensagemAdapter(mensagens, this, 1);
         listaDeMensagens.setAdapter(mensagemAdapter);
-
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(30, TimeUnit.SECONDS); // connect timeout
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.API_CHAT_URL)
-                .client(getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        chatService = retrofit.create(ChatService.class);
 
         ouvirMensagem();
 
@@ -77,27 +72,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private okhttp3.OkHttpClient getOkHttpClient() {
-        okhttp3.OkHttpClient.Builder builder = new okhttp3.OkHttpClient.Builder();
 
-        return builder
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
-    }
 
     public void colocaNaLista(Mensagem mensagem) {
 
-        if(mensagem != null) {
+        if(mensagem != null && !TextUtils.isEmpty(mensagem.getTexto())) {
             mensagens.add(mensagem);
 
             MensagemAdapter adapter = new MensagemAdapter(mensagens,this, idDoCliente);
             listaDeMensagens.setAdapter(adapter);
 
-            ouvirMensagem();
         }
 
+        ouvirMensagem();
 
     }
 

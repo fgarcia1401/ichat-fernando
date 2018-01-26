@@ -1,6 +1,4 @@
-package br.com.fernando.ichat_alura.callback;
-
-import android.util.Log;
+package br.com.fernando.ichat_alura.callbacks;
 
 import br.com.fernando.ichat_alura.activity.MainActivity;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
