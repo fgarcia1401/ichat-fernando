@@ -25,6 +25,9 @@ import br.com.fernando.ichat_alura.callbacks.OuvirMensagensCallback;
 import br.com.fernando.ichat_alura.component.ChatComponent;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
 import br.com.fernando.ichat_alura.service.ChatService;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -33,11 +36,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private Integer idDoCliente = 1;
-    private EditText etMensagem;
-    private Button btnEnviar;
 
-    private ListView listaDeMensagens;
     private List<Mensagem> mensagens;
+
+    @BindView(R.id.et_texto)
+    EditText etMensagem;
+    @BindView(R.id.btn_enviar)
+    Button btnEnviar;
+    @BindView(R.id.lv_mensagens)
+    ListView listaDeMensagens;
 
     @Inject
     ChatService chatService;
@@ -49,12 +56,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         component = ((ChatApplication) getApplication()).getComponent();
         component.inject(this);
-
-        listaDeMensagens = (ListView) findViewById(R.id.lv_mensagens);
-        etMensagem = (EditText) findViewById(R.id.et_texto);
-        btnEnviar = (Button) findViewById(R.id.btn_enviar);
 
         mensagens = new ArrayList<>();
 
@@ -63,16 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
         ouvirMensagem();
 
-        btnEnviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chatService.enviar(new Mensagem(idDoCliente, etMensagem.getText().toString())).enqueue(new EnviarMensagemCallback());
-            }
-        });
-
     }
 
-
+    @OnClick(R.id.btn_enviar)
+    public void enviarMensagem(){
+        chatService.enviar(new Mensagem(idDoCliente, etMensagem.getText().toString())).enqueue(new EnviarMensagemCallback());
+    }
 
     public void colocaNaLista(Mensagem mensagem) {
 
