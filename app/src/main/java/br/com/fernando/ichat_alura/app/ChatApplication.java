@@ -4,6 +4,7 @@ import android.app.Application;
 
 import br.com.fernando.ichat_alura.component.ChatComponent;
 import br.com.fernando.ichat_alura.component.DaggerChatComponent;
+import br.com.fernando.ichat_alura.module.ChatModule;
 
 /**
  * Created by fernando on 25/01/18.
@@ -20,6 +21,8 @@ public class ChatApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        chatComponent = DaggerChatComponent.builder().build();
+        chatComponent = DaggerChatComponent.builder()
+                .chatModule(new ChatModule(this))
+                .build();
     }
 }

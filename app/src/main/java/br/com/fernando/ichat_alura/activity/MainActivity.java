@@ -6,9 +6,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +47,14 @@ public class MainActivity extends AppCompatActivity {
     Button btnEnviar;
     @BindView(R.id.lv_mensagens)
     ListView listaDeMensagens;
+    @BindView(R.id.iv_avatar_usuario)
+    ImageView ivAvatarUsuario;
 
     @Inject
     ChatService chatService;
+
+    @Inject
+    Picasso picasso;
 
     private ChatComponent component;
 
@@ -58,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        picasso.with(this).load("http://api.adorable.io/avatars/285/" + idDoCliente + "png").into(ivAvatarUsuario);
+
         component = ((ChatApplication) getApplication()).getComponent();
         component.inject(this);
 
@@ -67,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         listaDeMensagens.setAdapter(mensagemAdapter);
 
         ouvirMensagem();
-
     }
 
     @OnClick(R.id.btn_enviar)

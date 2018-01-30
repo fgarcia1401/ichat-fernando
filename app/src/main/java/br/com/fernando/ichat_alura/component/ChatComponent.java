@@ -1,5 +1,6 @@
 package br.com.fernando.ichat_alura.component;
 
+import br.com.fernando.ichat_alura.adapter.MensagemAdapter;
 import br.com.fernando.ichat_alura.module.ChatModule;
 import br.com.fernando.ichat_alura.activity.MainActivity;
 import dagger.Component;
