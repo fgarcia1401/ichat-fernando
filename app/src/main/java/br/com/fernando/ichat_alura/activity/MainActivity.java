@@ -1,5 +1,10 @@
 package br.com.fernando.ichat_alura.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -58,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ChatComponent component;
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Mensagem mensagem = (Mensagem) intent.getSerializableExtra("mensagem");
+            colocaNaLista(mensagem);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         MensagemAdapter mensagemAdapter = new MensagemAdapter(mensagens, this, 1);
         listaDeMensagens.setAdapter(mensagemAdapter);
 
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter("nova_mensagem"));
+
         ouvirMensagem();
     }
 
@@ -84,17 +100,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void colocaNaLista(Mensagem mensagem) {
-
         if(mensagem != null && !TextUtils.isEmpty(mensagem.getTexto())) {
             mensagens.add(mensagem);
 
             MensagemAdapter adapter = new MensagemAdapter(mensagens,this, idDoCliente);
             listaDeMensagens.setAdapter(adapter);
-
         }
-
         ouvirMensagem();
-
     }
 
     public void ouvirMensagem() {
@@ -102,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new OuvirMensagensCallback(this));
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        localBroadcastManager.unregisterReceiver(broadcastReceiver);
+    }
 }
 
 
