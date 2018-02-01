@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.concurrent.TimeUnit;
 
 import br.com.fernando.ichat_alura.BuildConfig;
@@ -44,6 +46,11 @@ public class ChatModule  {
     public Picasso getPicasso() {
         Picasso picasso = new Picasso.Builder(app).build();
         return picasso;
+    }
+
+    @Provides
+    public EventBus getEventBus() {
+        return EventBus.builder().build();
     }
 
     private okhttp3.OkHttpClient getOkHttpClient() {
