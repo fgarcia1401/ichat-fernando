@@ -21,6 +21,7 @@ import br.com.fernando.ichat_alura.R;
 import br.com.fernando.ichat_alura.adapter.MensagemAdapter;
 import br.com.fernando.ichat_alura.app.ChatApplication;
 import br.com.fernando.ichat_alura.callbacks.EnviarMensagemCallback;
+import br.com.fernando.ichat_alura.callbacks.FailureEvent;
 import br.com.fernando.ichat_alura.callbacks.OuvirMensagensCallback;
 import br.com.fernando.ichat_alura.component.ChatComponent;
 import br.com.fernando.ichat_alura.event.MensagemEvent;
@@ -100,6 +101,12 @@ public class MainActivity extends AppCompatActivity {
         Call<Mensagem> call = chatService.ouvirMensagens();
         call.enqueue(new OuvirMensagensCallback(eventBus,this));
     }
+
+    @Subscribe
+    public void lidarCom(FailureEvent event) {
+        ouvirMensagem(null);
+    }
+
 
     @Override
     protected void onStop() {
