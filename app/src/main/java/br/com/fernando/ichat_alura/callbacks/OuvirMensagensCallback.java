@@ -1,12 +1,10 @@
 package br.com.fernando.ichat_alura.callbacks;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 
 import org.greenrobot.eventbus.EventBus;
 
-import br.com.fernando.ichat_alura.activity.MainActivity;
+import br.com.fernando.ichat_alura.event.FailureEvent;
 import br.com.fernando.ichat_alura.event.MensagemEvent;
 import br.com.fernando.ichat_alura.modelo.Mensagem;
 import retrofit2.Call;
