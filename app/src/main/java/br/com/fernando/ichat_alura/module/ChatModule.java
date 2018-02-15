@@ -1,6 +1,8 @@
 package br.com.fernando.ichat_alura.module;
 
 import android.app.Application;
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -51,6 +53,12 @@ public class ChatModule  {
     @Provides
     public EventBus getEventBus() {
         return EventBus.builder().build();
+    }
+
+    @Provides
+    public InputMethodManager getInputMethodManager() {
+        InputMethodManager inputMethodManager = (InputMethodManager) app.getSystemService(Context.INPUT_METHOD_SERVICE);
+        return inputMethodManager;
     }
 
     private okhttp3.OkHttpClient getOkHttpClient() {

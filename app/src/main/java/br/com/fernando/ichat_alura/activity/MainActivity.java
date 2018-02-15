@@ -3,6 +3,7 @@ package br.com.fernando.ichat_alura.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,7 @@ import br.com.fernando.ichat_alura.service.ChatService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Provides;
 import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.et_texto)
     EditText etMensagem;
+
     @BindView(R.id.btn_enviar)
     Button btnEnviar;
+
     @BindView(R.id.lv_mensagens)
     ListView listaDeMensagens;
+
     @BindView(R.id.iv_avatar_usuario)
     ImageView ivAvatarUsuario;
 
@@ -55,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     EventBus eventBus;
+
+    @Inject
+    InputMethodManager inputMethodManager;
 
     private ChatComponent component;
 
@@ -70,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
         component = ((ChatApplication) getApplication()).getComponent();
         component.inject(this);
 
-        mensagens = new ArrayList<>();
+        if(savedInstanceState != null) {
+            mensagens = (List<Mensagem>) savedInstanceState.getSerializable("mensagens");
+        } else {
+            mensagens = new ArrayList<>();
+        }
 
         MensagemAdapter mensagemAdapter = new MensagemAdapter(mensagens, this, 1);
         listaDeMensagens.setAdapter(mensagemAdapter);
@@ -80,9 +93,19 @@ public class MainActivity extends AppCompatActivity {
         eventBus.register(this);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("mensagens", (ArrayList) mensagens);
+    }
+
     @OnClick(R.id.btn_enviar)
     public void enviarMensagem(){
         chatService.enviar(new Mensagem(idDoCliente, etMensagem.getText().toString())).enqueue(new EnviarMensagemCallback());
+
+        etMensagem.getText().clear();
+        inputMethodManager.hideSoftInputFromWindow(etMensagem.getWindowToken(), 0);
     }
 
 
@@ -113,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
 
         eventBus.unregister(this);
-
     }
 }
 
